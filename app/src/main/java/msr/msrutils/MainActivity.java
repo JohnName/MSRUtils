@@ -1,13 +1,23 @@
 package msr.msrutils;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import msr.msrlibrary.base.activity.MSRBaseActivity;
+
+public class MainActivity extends MSRBaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int returnContentViewID() {
+        return 0;
+    }
+
+    @Override
+    protected void initActionbarAndStatusBar() {
+
+    }
+
+    @Override
+    protected void TODO(Bundle savedInstanceState) {
+
     }
 }

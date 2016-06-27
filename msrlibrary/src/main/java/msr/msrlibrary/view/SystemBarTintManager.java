@@ -7,20 +7,27 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 /**
  * Created by MSR on 2016/6/15.
  */
 
 public class SystemBarTintManager {
+
+    /**
+     * The default system bar tint color value.
+     */
     public static final int DEFAULT_TINT_COLOR = 0x99000000;
 
     private final SystemBarConfig mConfig;
@@ -32,7 +39,14 @@ public class SystemBarTintManager {
     private View mNavBarTintView;
     private Context conetext;
 
-
+    /**
+     * Constructor. Call this in the host activity onCreate method after its
+     * content view has been set. You should always create new instances when
+     * the host activity is recreated.
+     *
+     * @param activity The host activity.
+     */
+    @TargetApi(19)
     public SystemBarTintManager(Activity activity) {
 
         conetext = activity.getApplicationContext();
@@ -76,8 +90,228 @@ public class SystemBarTintManager {
         if (mNavBarAvailable) {
             setupNavBarView(activity, decorViewGroup);
         }
+
     }
 
+    /**
+     * 系统状态栏是否可见
+     * （如果平台运行Jelly Bean系统或更早的系统,或半透明系统UI模式尚未启用主题或通过窗口旗帜,那么这个方法没有用。）
+     *
+     * @param enabled true 可见 false 不可见
+     */
+    public void setStatusBarTintEnabled(boolean enabled) {
+        mStatusBarTintEnabled = enabled;
+        if (mStatusBarAvailable) {
+            mStatusBarTintView.setVisibility(enabled ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    /**
+     * 系统导航栏是否可见
+     * （如果这个平台没有软导航键,运行Jelly Bean系统或更早的系统,或半透明系统UI模式尚未启用主题或通过窗口旗帜,那么这个方法没有用。）
+     *
+     * @param enabled true 可见  false 不可见
+     */
+    public void setNavigationBarTintEnabled(boolean enabled) {
+        mNavBarTintEnabled = enabled;
+        if (mNavBarAvailable) {
+            mNavBarTintView.setVisibility(enabled ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    /**
+     * Apply the specified color tint to all system UI bars.
+     *
+     * @param color The color of the background tint.
+     */
+    public void setTintColor(int color) {
+        setStatusBarTintColor(color);
+        setNavigationBarTintColor(color);
+    }
+
+    /**
+     * Apply the specified drawable or color resource to all system UI bars.
+     *
+     * @param res The identifier of the resource.
+     */
+    public void setTintResource(int res) {
+        setStatusBarTintResource(res);
+        setNavigationBarTintResource(res);
+    }
+
+    /**
+     * Apply the specified drawable to all system UI bars.
+     *
+     * @param drawable The drawable to use as the background, or null to remove it.
+     */
+    public void setTintDrawable(Drawable drawable) {
+        setStatusBarTintDrawable(drawable);
+        setNavigationBarTintDrawable(drawable);
+    }
+
+    /**
+     * Apply the specified alpha to all system UI bars.
+     *
+     * @param alpha The alpha to use
+     */
+    public void setTintAlpha(float alpha) {
+        setStatusBarAlpha(alpha);
+        setNavigationBarAlpha(alpha);
+    }
+
+
+    /**
+     * 指定的颜色色适用于系统状态栏。
+     *
+     * @param color 颜色ID
+     */
+    public void setStatusBarTintColor(int color) {
+        if (mStatusBarAvailable) {
+            mStatusBarTintView.setBackgroundColor(color);
+        }
+    }
+
+    /**
+     * 指定的绘图或颜色的资源ID应用于系统状态栏。
+     *
+     * @param res 资源ID
+     */
+    public void setStatusBarTintResource(int res) {
+        if (mStatusBarAvailable) {
+            mStatusBarTintView.setBackgroundResource(res);
+        }
+    }
+
+    /**
+     * Apply the specified drawable to the system status bar.
+     *
+     * @param drawable The drawable to use as the background, or null to remove it.
+     */
+    @SuppressWarnings("deprecation")
+    public void setStatusBarTintDrawable(Drawable drawable) {
+        if (mStatusBarAvailable) {
+            mStatusBarTintView.setBackgroundDrawable(drawable);
+        }
+    }
+
+    /**
+     * Apply the specified alpha to the system status bar.
+     *
+     * @param alpha The alpha to use
+     */
+    @TargetApi(11)
+    public void setStatusBarAlpha(float alpha) {
+        if (mStatusBarAvailable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            mStatusBarTintView.setAlpha(alpha);
+        }
+    }
+
+    /**
+     * Apply the specified color tint to the system navigation bar.
+     *
+     * @param color The color of the background tint.
+     */
+    public void setNavigationBarTintColor(int color) {
+        if (mNavBarAvailable) {
+            mNavBarTintView.setBackgroundColor(color);
+        }
+    }
+
+    /**
+     * Apply the specified drawable or color resource to the system navigation bar.
+     *
+     * @param res The identifier of the resource.
+     */
+    public void setNavigationBarTintResource(int res) {
+        if (mNavBarAvailable) {
+            mNavBarTintView.setBackgroundResource(res);
+        }
+    }
+
+    /**
+     * Apply the specified drawable to the system navigation bar.
+     *
+     * @param drawable The drawable to use as the background, or null to remove it.
+     */
+    @SuppressWarnings("deprecation")
+    public void setNavigationBarTintDrawable(Drawable drawable) {
+        if (mNavBarAvailable) {
+            mNavBarTintView.setBackgroundDrawable(drawable);
+        }
+    }
+
+    /**
+     * Apply the specified alpha to the system navigation bar.
+     *
+     * @param alpha The alpha to use
+     */
+    @TargetApi(11)
+    public void setNavigationBarAlpha(float alpha) {
+        if (mNavBarAvailable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            mNavBarTintView.setAlpha(alpha);
+        }
+    }
+
+    /**
+     * Get the system bar configuration.
+     *
+     * @return The system bar configuration for the current device configuration.
+     */
+    public SystemBarConfig getConfig() {
+        return mConfig;
+    }
+
+    /**
+     * Is tinting enabled for the system status bar?
+     *
+     * @return True if enabled, False otherwise.
+     */
+    public boolean isStatusBarTintEnabled() {
+        return mStatusBarTintEnabled;
+    }
+
+    /**
+     * Is tinting enabled for the system navigation bar?
+     *
+     * @return True if enabled, False otherwise.
+     */
+    public boolean isNavBarTintEnabled() {
+        return mNavBarTintEnabled;
+    }
+
+    private void setupStatusBarView(Context context, ViewGroup decorViewGroup) {
+        mStatusBarTintView = new View(context);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, mConfig.getStatusBarHeight());
+        params.gravity = Gravity.TOP;
+        if (mNavBarAvailable && !mConfig.isNavigationAtBottom()) {
+            params.rightMargin = mConfig.getNavigationBarWidth();
+        }
+        mStatusBarTintView.setLayoutParams(params);
+        mStatusBarTintView.setBackgroundColor(DEFAULT_TINT_COLOR);
+        mStatusBarTintView.setVisibility(View.GONE);
+        decorViewGroup.addView(mStatusBarTintView);
+    }
+
+    private void setupNavBarView(Context context, ViewGroup decorViewGroup) {
+        mNavBarTintView = new View(context);
+        FrameLayout.LayoutParams params;
+        if (mConfig.isNavigationAtBottom()) {
+            params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, mConfig.getNavigationBarHeight());
+            params.gravity = Gravity.BOTTOM;
+        } else {
+            params = new FrameLayout.LayoutParams(mConfig.getNavigationBarWidth(), FrameLayout.LayoutParams.MATCH_PARENT);
+            params.gravity = Gravity.RIGHT;
+        }
+        mNavBarTintView.setLayoutParams(params);
+        mNavBarTintView.setBackgroundColor(DEFAULT_TINT_COLOR);
+        mNavBarTintView.setVisibility(View.GONE);
+        decorViewGroup.addView(mNavBarTintView);
+    }
+
+    /**
+     * Class which describes system bar sizing and other characteristics for the current
+     * device configuration.
+     */
     public static class SystemBarConfig {
 
         private static final String STATUS_BAR_HEIGHT_RES_NAME = "status_bar_height";
