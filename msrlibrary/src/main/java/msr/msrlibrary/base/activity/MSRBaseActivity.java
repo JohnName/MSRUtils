@@ -24,7 +24,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 
 import butterknife.ButterKnife;
 import msr.msrlibrary.R;
-import msr.msrlibrary.application.MSRBaseApplication;
+import msr.msrlibrary.base.application.MSRBaseApplication;
 import msr.msrlibrary.callback.LoadFailListenter;
 import msr.msrlibrary.utils.LogUtils;
 import msr.msrlibrary.utils.MSRUtils;

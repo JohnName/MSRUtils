@@ -1,23 +1,14 @@
 package msr.msrutils;
 
+import android.app.Activity;
 import android.os.Bundle;
 
-import msr.msrlibrary.base.activity.MSRBaseActivity;
-
-public class MainActivity extends MSRBaseActivity {
-
+public class MainActivity extends Activity {
     @Override
-    protected int returnContentViewID() {
-        return 0;
-    }
-
-    @Override
-    protected void initActionbarAndStatusBar() {
-
-    }
-
-    @Override
-    protected void TODO(Bundle savedInstanceState) {
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+//        FlowTextView flowTextView = (FlowTextView) findViewById(R.id.ftv);
+//        flowTextView.setText("卡死机大家lag将来大家了解 ");
     }
 }
